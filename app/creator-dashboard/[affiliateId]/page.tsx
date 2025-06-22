@@ -69,7 +69,6 @@ const tabAnimationStyles = `
 interface AffiliateData {
   influencer: {
     name: string
-    username: string
     bio: string
     avatar: string
     followers: string
@@ -98,8 +97,7 @@ interface AffiliateData {
 // Mock API response
 const getMockAffiliateData = (affiliateId: string): AffiliateData => ({
   influencer: {
-    name: "Sarah Adventures",
-    username: "@welcomearound",
+    name: "Anita Pinter",
     bio: "Travel enthusiast & adventure seeker 🌍 Sharing amazing experiences from around the globe ✈️ Partnered with Headout for the best travel deals!",
     avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=988&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     followers: "125K",
@@ -738,7 +736,7 @@ export default function AffiliateDashboard({ params }: { params: Promise<{ affil
                     </TabsTrigger>
                   </TooltipTrigger>
                   <TooltipContent side="top" className="max-w-xs bg-white text-gray-700 p-3 shadow-lg border border-purple-100 z-[100]">
-                    This section will automatically showcase all the experiences you've added through Headout — no manual updates needed!
+                  All the experiences you've booked with Headout will automatically appear here — no action needed on your part
                   </TooltipContent>
                 </Tooltip>
                 <TabsTrigger 

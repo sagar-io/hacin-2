@@ -30,7 +30,6 @@ interface LandingPageResponse {
   tourDetails: TourDetail[]
   influencer: {
     name: string
-    username: string
     bio: string
     avatar: string
     followers: string
@@ -84,13 +83,12 @@ export default function AffiliateRecommendations({ params }: { params: Promise<{
 
   // Hardcoded profile data
   const profileData = {
-    name: "Sarah Adventures",
-    username: "@sarahadventures",
-    bio: "Professional travel blogger and adventure seeker. Exploring the world one destination at a time. Sharing authentic travel experiences and hidden gems from around the globe.",
+    name: "Anita Pinter",
+    bio: "Travel enthusiast & adventure seeker 🌍 Sharing amazing experiences from around the globe ✈️ Partnered with Headout for the best travel deals!",
     avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=988&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    followers: "50K+",
-    experiences: 120,
-    countries: 45,
+    followers: "125K",
+    experiences: 47,
+    countries: 23,
     socialLinks: {
       instagram: "https://instagram.com/welcomearound",
       youtube: "https://youtube.com/welcomearound",

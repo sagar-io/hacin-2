@@ -5,7 +5,6 @@ import { Instagram, Youtube, Globe } from "lucide-react"
 interface ProfileHeaderProps {
   influencer: {
     name: string
-    username: string
     bio: string
     avatar: string
     followers: string
@@ -36,7 +35,6 @@ export function ProfileHeader({ influencer }: ProfileHeaderProps) {
 
           <div className="flex-1 text-center md:text-left">
             <h1 className="text-3xl md:text-4xl font-bold mb-2">{influencer.name}</h1>
-            <p className="text-purple-100 text-lg mb-4">{influencer.username}</p>
             <p className="text-purple-50 mb-6 max-w-2xl leading-relaxed">{influencer.bio}</p>
 
             <div className="flex flex-wrap justify-center md:justify-start gap-6 mb-6">

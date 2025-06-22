@@ -28,7 +28,6 @@ import { use } from "react"
 interface AffiliateData {
   influencer: {
     name: string
-    username: string
     bio: string
     avatar: string
     followers: string
@@ -57,8 +56,7 @@ interface AffiliateData {
 // Mock API response
 const getMockAffiliateData = (affiliateId: string): AffiliateData => ({
   influencer: {
-    name: "Sarah Adventures",
-    username: "@welcomearound",
+    name: "Anita Pinter",
     bio: "Travel enthusiast & adventure seeker 🌍 Sharing amazing experiences from around the globe ✈️ Partnered with Headout for the best travel deals!",
     avatar: "/placeholder.svg?height=120&width=120",
     followers: "125K",
@@ -243,7 +241,6 @@ export default function AffiliateRecommendations({ params }: { params: Promise<{
 
             <div className="flex-1 text-center md:text-left">
               <h1 className="text-3xl md:text-4xl font-bold mb-2">{affiliateData.influencer.name}</h1>
-              <p className="text-purple-100 text-lg mb-4">{affiliateData.influencer.username}</p>
               <p className="text-purple-50 mb-6 max-w-2xl leading-relaxed">{affiliateData.influencer.bio}</p>
 
               <div className="flex flex-wrap justify-center md:justify-start gap-6 mb-6">
