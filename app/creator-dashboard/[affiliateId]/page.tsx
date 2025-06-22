@@ -477,10 +477,13 @@ export default function AffiliateDashboard({ params }: { params: Promise<{ affil
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-gradient-to-r from-[#8000FF] to-purple-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold">H</span>
-              </div>
-              <span className="text-xl font-bold text-gray-900">Headout</span>
+              <img 
+                src="https://cdn-imgix-open.headout.com/logo/svg/Headout_logo_purps.svg?w=229.5&h=36&fm=svg&crop=faces&auto=compress%2Cformat&fit=min" 
+                alt="Headout" 
+                width="153"
+                height="23"
+                style={{ width: "153px", height: "23px" }}
+              />
             </div>
             {selectedExperiences.length > 0 && activeTab === "experiences" && (
               <Button onClick={copyToClipboard} size="sm" className="bg-[#8000FF] hover:bg-purple-700 text-white">
