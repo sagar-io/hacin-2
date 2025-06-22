@@ -1103,18 +1103,6 @@ export default function AffiliateDashboard({ params }: { params: Promise<{ affil
                 <Check className="w-6 h-6 text-green-600" />
               </div>
               <div className="text-center">
-                <div className="bg-purple-50 border border-purple-100 rounded-lg p-4 mb-4">
-                  <h3 className="font-semibold text-lg text-gray-800 mb-2">
-                    {portfolioName}
-                  </h3>
-                  <p className="text-gray-600 text-sm italic">
-                    "{experienceText}"
-                  </p>
-                  <div className="mt-3 pt-3 border-t border-purple-100 flex items-center justify-center text-sm text-purple-600">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2"><rect width="7" height="7" x="3" y="3" rx="1"></rect><rect width="7" height="7" x="14" y="3" rx="1"></rect><rect width="7" height="7" x="14" y="14" rx="1"></rect><rect width="7" height="7" x="3" y="14" rx="1"></rect></svg>
-                    {selectedModalExperiences.length} {selectedModalExperiences.length === 1 ? 'experience' : 'experiences'} included
-                  </div>
-                </div>
                 <p className="text-gray-600 mb-4">
                   Your landing page has been created successfully. Here's your unique link:
                 </p>
