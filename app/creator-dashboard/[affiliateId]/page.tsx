@@ -659,12 +659,12 @@ export default function AffiliateDashboard({ params }: { params: Promise<{ affil
 
       <div className="container mx-auto px-4 py-8">
         {/* Tabs Navigation */}
-        <Tabs defaultValue="experiences" className="mb-8" onValueChange={setActiveTab}>
-          <div className="relative mb-10">
-            <div className="absolute inset-0 bg-gradient-to-r from-purple-100 to-blue-50 rounded-full h-12 blur-md opacity-50"></div>
-            <TabsList className="relative grid w-full grid-cols-2 h-12 p-1 bg-white/80 backdrop-blur-sm rounded-full shadow-md border border-purple-100 transition-all duration-300 ease-in-out">
-              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-purple-50/50 to-blue-50/50 opacity-70 pointer-events-none"></div>
-              <TooltipProvider>
+        <TooltipProvider>
+          <Tabs defaultValue="experiences" className="mb-8" onValueChange={setActiveTab}>
+            <div className="relative mb-10">
+              <div className="absolute inset-0 bg-gradient-to-r from-purple-100 to-blue-50 rounded-full h-12 blur-md opacity-50"></div>
+              <TabsList className="relative grid w-full grid-cols-2 h-12 p-1 bg-white/80 backdrop-blur-sm rounded-full shadow-md border border-purple-100 transition-all duration-300 ease-in-out">
+                <div className="absolute inset-0 rounded-full bg-gradient-to-r from-purple-50/50 to-blue-50/50 opacity-70 pointer-events-none"></div>
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <TabsTrigger 
@@ -681,179 +681,179 @@ export default function AffiliateDashboard({ params }: { params: Promise<{ affil
                     This section will automatically showcase all the experiences you've added through Headout — no manual updates needed!
                   </TooltipContent>
                 </Tooltip>
-              </TooltipProvider>
-              <TabsTrigger 
-                value="landing" 
-                className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#8000FF] data-[state=active]:to-purple-600 data-[state=active]:text-white rounded-full transition-all duration-300 data-[state=active]:shadow-md flex items-center justify-center gap-2 relative overflow-hidden group tab-trigger-hover"
-              >
-                <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-purple-600/20 to-blue-500/20 opacity-0 group-hover:opacity-100 group-data-[state=active]:opacity-0 transition-opacity"></span>
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-bar-chart-3"><path d="M3 3v18h18"></path><path d="M18 17V9"></path><path d="M13 17V5"></path><path d="M8 17v-3"></path></svg>
-                <span className="relative z-10">Your Landing Pages</span>
-                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 h-1 w-10 rounded-t-full bg-[#8000FF] opacity-0 data-[state=active]:opacity-100 transition-opacity duration-300"></span>
-              </TabsTrigger>
-            </TabsList>
-          </div>
-          
-          {/* Tab 1: Experiences */}
-          <TabsContent value="experiences" className="animate-in fade-in-50 slide-in-from-bottom-5 duration-500 tab-content-animate">
-            {/* Selected Experiences Summary */}
-            {selectedExperiences.length > 0 && (
-              <div className="mb-6">
-                <Card className="border-2 border-[#8000FF] bg-gradient-to-r from-purple-50 to-white">
-                  <CardContent className="p-4">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center text-[#8000FF]">
-                        <Share2 className="w-5 h-5 mr-2" />
-                        <span className="font-semibold">
-                          {selectedExperiences.length} experiences selected for your portfolio
-                        </span>
-                      </div>
-                      <div className="text-sm text-gray-600">Selected experiences appear at the top</div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            )}
-
-            {/* Experiences Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredExperiences.map((experience, index) => (
-                <div key={experience.id} className="tab-item-animate">
-                  <ExperienceCard
-                    experience={experience}
-                    variant="grid"
-                    isSelected={selectedExperiences.includes(experience.id)}
-                    onSelect={() => toggleExperience(experience.id)}
-                  />
-                </div>
-              ))}
-            </div>
-
-            <div className="mt-8 flex justify-center">
-              <Button 
-                size="lg"
-                onClick={() => setIsModalOpen(true)}
-                className="bg-[#8000FF] hover:bg-purple-700 text-white font-semibold py-4 px-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 min-w-[200px]"
-              >
-                Create Landing Page
-              </Button>
-            </div>
-          </TabsContent>
-          
-          {/* Tab 2: Your Landing Pages */}
-          <TabsContent value="landing" className="animate-in fade-in-50 slide-in-from-bottom-5 duration-500 tab-content-animate">
-            {isLandingPagesLoading && (
-              <div className="text-center py-8">
-                <div className="w-10 h-10 border-2 border-t-2 border-[#8000FF] rounded-full animate-spin mx-auto mb-3"></div>
-                <p className="text-gray-500">Loading landing pages...</p>
-              </div>
-            )}
-            
-            {landingPagesError && (
-              <div className="bg-red-50 border border-red-100 rounded-lg p-4 mb-6">
-                <p className="text-red-600 text-sm">{landingPagesError}</p>
-              </div>
-            )}
-            
-            {!isLandingPagesLoading && !landingPagesError && landingPages.length === 0 && (
-              <div className="text-center py-12 bg-gray-50 rounded-lg border border-gray-200">
-                <p className="text-gray-500 mb-4">You haven't created any landing pages yet</p>
-                <Button 
-                  className="bg-[#8000FF] hover:bg-purple-700 text-white"
-                  onClick={() => {
-                    setActiveTab("experiences");
-                    setTimeout(() => setIsModalOpen(true), 100);
-                  }}
+                <TabsTrigger 
+                  value="landing" 
+                  className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#8000FF] data-[state=active]:to-purple-600 data-[state=active]:text-white rounded-full transition-all duration-300 data-[state=active]:shadow-md flex items-center justify-center gap-2 relative overflow-hidden group tab-trigger-hover"
                 >
-                  Create Your First Landing Page
-                </Button>
-              </div>
-            )}
+                  <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-purple-600/20 to-blue-500/20 opacity-0 group-hover:opacity-100 group-data-[state=active]:opacity-0 transition-opacity"></span>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-bar-chart-3"><path d="M3 3v18h18"></path><path d="M18 17V9"></path><path d="M13 17V5"></path><path d="M8 17v-3"></path></svg>
+                  <span className="relative z-10">Your Landing Pages</span>
+                  <span className="absolute bottom-0 left-1/2 -translate-x-1/2 h-1 w-10 rounded-t-full bg-[#8000FF] opacity-0 data-[state=active]:opacity-100 transition-opacity duration-300"></span>
+                </TabsTrigger>
+              </TabsList>
+            </div>
             
-            {!isLandingPagesLoading && landingPages.length > 0 && (
-              <div className="grid gap-6">
-                {landingPages.map((page, index) => (
-                  <div key={page.pageId} className="tab-item-animate" style={{animationDelay: `${0.05 * (index + 1)}s`}}>
-                    <Card className="p-6 hover:shadow-md transition-shadow">
-                      <div className="flex gap-4">
-                        <img
-                          src={page.thumbnail || "/placeholder.jpg"}
-                          alt={page.portfolioName}
-                          className="w-28 h-20 rounded-lg object-cover border"
-                        />
-                        <div className="flex-1">
-                          <h3 className="font-semibold text-lg mb-2">{page.portfolioName}</h3>
-                          <div className="flex items-center gap-2 text-sm text-gray-500 mb-4">
-                            <Calendar className="w-4 h-4" />
-                            Created: {new Date(page.lastVisitedDate).toLocaleDateString()}
-                            <span className="ml-2 px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">
-                              {page.status}
-                            </span>
-                          </div>
-
-                          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-4">
-                            <div className="flex items-center gap-3">
-                              <div className="p-2 bg-blue-50 rounded-lg">
-                                <Eye className="w-5 h-5 text-blue-600" />
-                              </div>
-                              <div>
-                                <div className="font-semibold text-lg">{page.viewers?.toLocaleString() || "0"}</div>
-                                <div className="text-sm text-gray-500">Viewers</div>
-                              </div>
-                            </div>
-                            <div className="flex items-center gap-3">
-                              <div className="p-2 bg-green-50 rounded-lg">
-                                <DollarSign className="w-5 h-5 text-green-600" />
-                              </div>
-                              <div>
-                                <div className="font-semibold text-lg">${page.revenue?.toLocaleString() || "0"}</div>
-                                <div className="text-sm text-gray-500">Revenue</div>
-                              </div>
-                            </div>
-                            <div className="flex items-center gap-3">
-                              <div className="p-2 bg-purple-50 rounded-lg">
-                                <Users className="w-5 h-5 text-purple-600" />
-                              </div>
-                              <div>
-                                <div className="font-semibold text-lg">{page.conversions || 0} sales</div>
-                                <div className="text-sm text-gray-500">
-                                  {page.viewers && page.conversions 
-                                    ? ((page.conversions / page.viewers) * 100).toFixed(1) 
-                                    : "0"}% conversion
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className="flex gap-3">
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={() => handleShareLandingPage(page.pageId)}
-                              className="flex items-center gap-2 hover:bg-blue-50 hover:border-blue-200"
-                            >
-                              <Share2 className="w-4 h-4" />
-                              {copied ? "Copied!" : "Share URL"}
-                            </Button>
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              className="hover:bg-gray-50"
-                              onClick={() => window.open(`/recommendations/${page.pageId}`, "_blank")}
-                            >
-                              <ExternalLink className="w-4 h-4 mr-2" />
-                              View Page
-                            </Button>
-                          </div>
+            {/* Tab 1: Experiences */}
+            <TabsContent value="experiences" className="animate-in fade-in-50 slide-in-from-bottom-5 duration-500 tab-content-animate">
+              {/* Selected Experiences Summary */}
+              {selectedExperiences.length > 0 && (
+                <div className="mb-6">
+                  <Card className="border-2 border-[#8000FF] bg-gradient-to-r from-purple-50 to-white">
+                    <CardContent className="p-4">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center text-[#8000FF]">
+                          <Share2 className="w-5 h-5 mr-2" />
+                          <span className="font-semibold">
+                            {selectedExperiences.length} experiences selected for your portfolio
+                          </span>
                         </div>
+                        <div className="text-sm text-gray-600">Selected experiences appear at the top</div>
                       </div>
-                    </Card>
+                    </CardContent>
+                  </Card>
+                </div>
+              )}
+
+              {/* Experiences Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredExperiences.map((experience, index) => (
+                  <div key={experience.id} className="tab-item-animate">
+                    <ExperienceCard
+                      experience={experience}
+                      variant="grid"
+                      isSelected={selectedExperiences.includes(experience.id)}
+                      onSelect={() => toggleExperience(experience.id)}
+                    />
                   </div>
                 ))}
               </div>
-            )}
-          </TabsContent>
-        </Tabs>
+
+              <div className="mt-8 flex justify-center">
+                <Button 
+                  size="lg"
+                  onClick={() => setIsModalOpen(true)}
+                  className="bg-[#8000FF] hover:bg-purple-700 text-white font-semibold py-4 px-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 min-w-[200px]"
+                >
+                  Create Landing Page
+                </Button>
+              </div>
+            </TabsContent>
+            
+            {/* Tab 2: Your Landing Pages */}
+            <TabsContent value="landing" className="animate-in fade-in-50 slide-in-from-bottom-5 duration-500 tab-content-animate">
+              {isLandingPagesLoading && (
+                <div className="text-center py-8">
+                  <div className="w-10 h-10 border-2 border-t-2 border-[#8000FF] rounded-full animate-spin mx-auto mb-3"></div>
+                  <p className="text-gray-500">Loading landing pages...</p>
+                </div>
+              )}
+              
+              {landingPagesError && (
+                <div className="bg-red-50 border border-red-100 rounded-lg p-4 mb-6">
+                  <p className="text-red-600 text-sm">{landingPagesError}</p>
+                </div>
+              )}
+              
+              {!isLandingPagesLoading && !landingPagesError && landingPages.length === 0 && (
+                <div className="text-center py-12 bg-gray-50 rounded-lg border border-gray-200">
+                  <p className="text-gray-500 mb-4">You haven't created any landing pages yet</p>
+                  <Button 
+                    className="bg-[#8000FF] hover:bg-purple-700 text-white"
+                    onClick={() => {
+                      setActiveTab("experiences");
+                      setTimeout(() => setIsModalOpen(true), 100);
+                    }}
+                  >
+                    Create Your First Landing Page
+                  </Button>
+                </div>
+              )}
+              
+              {!isLandingPagesLoading && landingPages.length > 0 && (
+                <div className="grid gap-6">
+                  {landingPages.map((page, index) => (
+                    <div key={page.pageId} className="tab-item-animate" style={{animationDelay: `${0.05 * (index + 1)}s`}}>
+                      <Card className="p-6 hover:shadow-md transition-shadow">
+                        <div className="flex gap-4">
+                          <img
+                            src={page.thumbnail || "/placeholder.jpg"}
+                            alt={page.portfolioName}
+                            className="w-28 h-20 rounded-lg object-cover border"
+                          />
+                          <div className="flex-1">
+                            <h3 className="font-semibold text-lg mb-2">{page.portfolioName}</h3>
+                            <div className="flex items-center gap-2 text-sm text-gray-500 mb-4">
+                              <Calendar className="w-4 h-4" />
+                              Created: {new Date(page.lastVisitedDate).toLocaleDateString()}
+                              <span className="ml-2 px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">
+                                {page.status}
+                              </span>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-4">
+                              <div className="flex items-center gap-3">
+                                <div className="p-2 bg-blue-50 rounded-lg">
+                                  <Eye className="w-5 h-5 text-blue-600" />
+                                </div>
+                                <div>
+                                  <div className="font-semibold text-lg">{page.viewers?.toLocaleString() || "0"}</div>
+                                  <div className="text-sm text-gray-500">Viewers</div>
+                                </div>
+                              </div>
+                              <div className="flex items-center gap-3">
+                                <div className="p-2 bg-green-50 rounded-lg">
+                                  <DollarSign className="w-5 h-5 text-green-600" />
+                                </div>
+                                <div>
+                                  <div className="font-semibold text-lg">${page.revenue?.toLocaleString() || "0"}</div>
+                                  <div className="text-sm text-gray-500">Revenue</div>
+                                </div>
+                              </div>
+                              <div className="flex items-center gap-3">
+                                <div className="p-2 bg-purple-50 rounded-lg">
+                                  <Users className="w-5 h-5 text-purple-600" />
+                                </div>
+                                <div>
+                                  <div className="font-semibold text-lg">{page.conversions || 0} sales</div>
+                                  <div className="text-sm text-gray-500">
+                                    {page.viewers && page.conversions 
+                                      ? ((page.conversions / page.viewers) * 100).toFixed(1) 
+                                      : "0"}% conversion
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className="flex gap-3">
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => handleShareLandingPage(page.pageId)}
+                                className="flex items-center gap-2 hover:bg-blue-50 hover:border-blue-200"
+                              >
+                                <Share2 className="w-4 h-4" />
+                                {copied ? "Copied!" : "Share URL"}
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                className="hover:bg-gray-50"
+                                onClick={() => window.open(`/recommendations/${page.pageId}`, "_blank")}
+                              >
+                                <ExternalLink className="w-4 h-4 mr-2" />
+                                View Page
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+                      </Card>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </TabsContent>
+          </Tabs>
+        </TooltipProvider>
 
         {/* Experience Selection Modal */}
         <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
