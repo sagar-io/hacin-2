@@ -636,16 +636,25 @@ export default function AffiliateDashboard({ params }: { params: Promise<{ affil
     }
   }
 
-  // Add this useEffect to initialize modal selections
+  // Add this useEffect to initialize modal selections and clear form when closed
   useEffect(() => {
     if (isModalOpen) {
       setSelectedModalExperiences(selectedExperiences)
     } else {
       // Reset form fields when modal is closed
-      // setPortfolioName("My European Adventure")
-      // setExperienceText("Here are my favorite tours in Europe!")
+      setPortfolioName("")
+      setExperienceText("")
+      setSelectedModalExperiences([])
     }
   }, [isModalOpen, selectedExperiences])
+
+  // Clear success modal state when closed
+  useEffect(() => {
+    if (!isSuccessModalOpen) {
+      // Reset success modal state when it's closed
+      setLandingPageId("")
+    }
+  }, [isSuccessModalOpen])
 
   // Add this function to handle modal experience selection
   const toggleModalExperience = (experienceId: string) => {
@@ -687,8 +696,7 @@ export default function AffiliateDashboard({ params }: { params: Promise<{ affil
           thumbnail: [
             "https://cdn-imgix.headout.com/media/images/50bae31b370027fe4798b664858fa80a-3586-10.jpg",
             "https://cdn-imgix.headout.com/media/images/6c6519b8db7ddab3f5381d54ee30032a-Frame-banner.jpg",
-            "/placeholder.jpg"
-          ][index % 3]
+          ][index % 2]
         }));
         
         setLandingPages(enhancedData);
@@ -952,7 +960,15 @@ export default function AffiliateDashboard({ params }: { params: Promise<{ affil
         </TooltipProvider>
 
         {/* Experience Selection Modal */}
-        <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+        <Dialog open={isModalOpen} onOpenChange={(open) => {
+          setIsModalOpen(open);
+          // This ensures the modal state is cleared even when closed via Escape key or clicking outside
+          if (!open) {
+            setPortfolioName("");
+            setExperienceText("");
+            setSelectedModalExperiences([]);
+          }
+        }}>
           <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>Select Experiences for Your Landing Page</DialogTitle>
@@ -1071,7 +1087,13 @@ export default function AffiliateDashboard({ params }: { params: Promise<{ affil
         </Dialog>
 
         {/* Success Modal */}
-        <Dialog open={isSuccessModalOpen} onOpenChange={setIsSuccessModalOpen}>
+        <Dialog open={isSuccessModalOpen} onOpenChange={(open) => {
+          setIsSuccessModalOpen(open);
+          // Clear landing page ID when success modal is closed
+          if (!open) {
+            setLandingPageId("");
+          }
+        }}>
           <DialogContent className="sm:max-w-md">
             <DialogHeader>
               <DialogTitle className="text-center">Landing Page Created!</DialogTitle>
