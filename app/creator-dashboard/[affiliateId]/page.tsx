@@ -368,10 +368,6 @@ export default function AffiliateDashboard({ params }: { params: Promise<{ affil
           })
         });
 
-        if (!influencerResponse.ok) {
-          console.error('Failed to initialize influencer:', await influencerResponse.text());
-        }
-
         // Use hardcoded experiences
         const mockData = {
           ...getMockAffiliateData(resolvedParams.affiliateId),

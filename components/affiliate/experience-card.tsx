@@ -16,6 +16,7 @@ interface ExperienceCardProps {
     category: string
     image: string
     description: string
+    url?: string
   }
   isSelected?: boolean
   showSelectButton?: boolean
@@ -38,6 +39,14 @@ export function ExperienceCard({
       onSelect(experience.id)
     }
   }
+
+  const handleCardClick = (e: React.MouseEvent) => {
+    if (showSelectButton) return
+    if (experience.url) {
+      window.open(experience.url, '_blank')
+    }
+  }
+
   console.log("experience", experience)
 
   if (variant === "list") {
@@ -48,7 +57,7 @@ export function ExperienceCard({
             ? "ring-2 ring-[#8000FF] bg-purple-50 border-[#8000FF]"
             : "border-gray-200 bg-white"
         } shadow-sm cursor-pointer transition-all duration-200 hover:shadow-md`}
-        onClick={showSelectButton ? handleSelect : undefined}
+        onClick={showSelectButton ? handleSelect : handleCardClick}
       >
         <CardContent className="p-4">
           <div className="flex items-center space-x-4">
@@ -122,7 +131,7 @@ export function ExperienceCard({
     return (
       <Card
         className="cursor-pointer transition-all duration-200 hover:shadow-lg border-gray-200 bg-white overflow-hidden"
-        onClick={showSelectButton ? handleSelect : undefined}
+        onClick={showSelectButton ? handleSelect : handleCardClick}
       >
         <div className="flex flex-col md:flex-row">
           <div className="relative md:w-1/2">
@@ -196,7 +205,7 @@ export function ExperienceCard({
   return (
     <Card
       className="cursor-pointer transition-all duration-200 hover:shadow-lg border-gray-200 bg-white h-full"
-      onClick={showSelectButton ? handleSelect : undefined}
+      onClick={showSelectButton ? handleSelect : handleCardClick}
     >
       <div className="relative">
         <Image

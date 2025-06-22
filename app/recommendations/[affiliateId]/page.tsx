@@ -17,6 +17,7 @@ interface TourDetail {
   reviews: number
   duration: string
   category: string
+  url?: string
 }
 
 interface LandingPageResponse {
@@ -62,6 +63,7 @@ interface SimilarTourDetail {
     currencyCode: string
     finalPrice: number
   }
+  url?: string
 }
 
 interface SimilarToursResponse {
@@ -82,17 +84,17 @@ export default function AffiliateRecommendations({ params }: { params: Promise<{
 
   // Hardcoded profile data
   const profileData = {
-    name: "Sarah Adventures",
-    username: "@sarahadventures",
-    bio: "Professional travel blogger and adventure seeker. Exploring the world one destination at a time. Sharing authentic travel experiences and hidden gems from around the globe.",
-    avatar: "/placeholder-user.jpg",
-    followers: "50K+",
-    experiences: 120,
-    countries: 45,
+    name: "Anita Pinter",
+    username: "@welcomearound",
+    bio: "Travel enthusiast & adventure seeker 🌍 Sharing amazing experiences from around the globe ✈️ Partnered with Headout for the best travel deals!",
+    avatar: "/placeholder.svg?height=120&width=120",
+    followers: "125K",
+    experiences: 47,
+    countries: 23,
     socialLinks: {
-      instagram: "https://instagram.com/sarahadventures",
-      youtube: "https://youtube.com/@sarahadventures",
-      website: "https://sarahadventures.com"
+      instagram: "https://instagram.com/welcomearound",
+      youtube: "https://youtube.com/welcomearound",
+      website: "https://welcomearound.com",
     }
   }
 
@@ -244,7 +246,8 @@ export default function AffiliateRecommendations({ params }: { params: Promise<{
                   rating: tour.rating ?? 0,
                   reviews: tour.reviews ?? 0,
                   duration: tour.duration ?? "",
-                  category: tour.category ?? ""
+                  category: tour.category ?? "",
+                  url: tour.url || "https://www.headout.com/colosseum-tickets/priority-tickets-to-colosseum-roman-forum-palatine-hill-fast-track-entry-tickets-e-7148/"
                 }}
                 variant="featured" 
                 showBookButton={true}
@@ -291,7 +294,8 @@ export default function AffiliateRecommendations({ params }: { params: Promise<{
                     duration: tour.duration ? `${tour.duration.value} ${tour.duration.unit}` : "Flexible",
                     category: tour.category || "Tour",
                     image: tour.imageUrl || "/placeholder.jpg",
-                    description: tour.shortSummary || tour.summary || "No description available"
+                    description: tour.shortSummary || tour.summary || "No description available",
+                    url: tour.url || ""
                   }}
                   variant="grid" 
                   showBookButton={true}
