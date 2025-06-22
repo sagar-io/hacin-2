@@ -11,6 +11,13 @@ interface TourDetail {
   tourName: string
   summary: string | null
   mediaUrls: string | null
+  location: string
+  price: string
+  rating: number
+  reviews: number
+  duration: string
+  category: string
+  url?: string
 }
 
 interface LandingPageResponse {
@@ -56,6 +63,7 @@ interface SimilarTourDetail {
     currencyCode: string
     finalPrice: number
   }
+  url?: string
 }
 
 interface SimilarToursResponse {
@@ -84,9 +92,9 @@ export default function AffiliateRecommendations({ params }: { params: Promise<{
     experiences: 120,
     countries: 45,
     socialLinks: {
-      instagram: "https://instagram.com/sarahadventures",
-      youtube: "https://youtube.com/@sarahadventures",
-      website: "https://sarahadventures.com"
+      instagram: "https://instagram.com/welcomearound",
+      youtube: "https://youtube.com/welcomearound",
+      website: "https://welcomearound.com",
     }
   }
 
@@ -242,16 +250,17 @@ export default function AffiliateRecommendations({ params }: { params: Promise<{
               <ExperienceCard 
                 key={tour.tourId} 
                 experience={{
-                  id: tour.tourId.toString(),
-                  title: tour.tourName,
-                  description: tour.summary || "No description available",
-                  image: tour.mediaUrls || "/placeholder.jpg",
-                  location: "Dubai", // Default location since it's not in the API
-                  price: "Contact for price",
-                  rating: 4.5, // Default rating since it's not in the API
-                  reviews: 0,
-                  duration: "Flexible",
-                  category: "Tour"
+                  id: tour.tourId?.toString() ?? "",
+                  title: tour.tourName ?? "",
+                  description: tour.summary ?? "",
+                  image: tour.mediaUrls ?? "/placeholder.jpg",
+                  location: tour.location ?? "",
+                  price: tour.price ?? "",
+                  rating: tour.rating ?? 0,
+                  reviews: tour.reviews ?? 0,
+                  duration: tour.duration ?? "",
+                  category: tour.category ?? "",
+                  url: tour.url || "https://www.headout.com/colosseum-tickets/priority-tickets-to-colosseum-roman-forum-palatine-hill-fast-track-entry-tickets-e-7148/"
                 }}
                 variant="featured" 
                 showBookButton={true}
@@ -298,7 +307,8 @@ export default function AffiliateRecommendations({ params }: { params: Promise<{
                     duration: tour.duration ? `${tour.duration.value} ${tour.duration.unit}` : "Flexible",
                     category: tour.category || "Tour",
                     image: tour.imageUrl || "/placeholder.jpg",
-                    description: tour.shortSummary || tour.summary || "No description available"
+                    description: tour.shortSummary || tour.summary || "No description available",
+                    url: tour.url || ""
                   }}
                   variant="grid" 
                   showBookButton={true}
