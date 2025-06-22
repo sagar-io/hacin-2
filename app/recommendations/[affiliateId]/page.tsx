@@ -251,7 +251,7 @@ export default function AffiliateRecommendations({ params }: { params: Promise<{
                   image: tour.mediaUrls ?? "/placeholder.jpg",
                   location: tour.location ?? "Rome",
                   price: tour.price ?? `$${Math.floor(Math.random() * 100) + 1}`,
-                  rating: tour.rating ?? 4.3,
+                  rating: 4.3,
                   reviews: tour.reviews ?? 10700,
                   duration: tour.duration ?? "2 Hours",
                   category: tour.category ?? "Tour",
