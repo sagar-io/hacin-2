@@ -248,6 +248,8 @@ export default function AffiliateDashboard({ params }: { params: Promise<{ affil
   const [landingPages, setLandingPages] = useState<UserLandingPage[]>([])
   const [isLandingPagesLoading, setIsLandingPagesLoading] = useState(false)
   const [landingPagesError, setLandingPagesError] = useState<string | null>(null)
+  const [portfolioName, setPortfolioName] = useState<string>("")
+  const [experienceText, setExperienceText] = useState<string>("")
 
   // Fetch affiliate data
   useEffect(() => {
@@ -363,8 +365,8 @@ export default function AffiliateDashboard({ params }: { params: Promise<{ affil
           tourIds: selectedExperiences.map(exp => parseInt(exp.id)),
           status: "PUBLISHED",
           lastVisitedDate: "2023-06-15",
-          portfolioName: "My European Adventure",
-          experienceText: "Here are my favorite tours in Europe!"
+          portfolioName: portfolioName,
+          experienceText: experienceText
         }),
       })
 
@@ -389,8 +391,12 @@ export default function AffiliateDashboard({ params }: { params: Promise<{ affil
   useEffect(() => {
     if (isModalOpen) {
       setSelectedModalExperiences(selectedExperiences)
+    } else {
+      // Reset form fields when modal is closed
+      // setPortfolioName("My European Adventure")
+      // setExperienceText("Here are my favorite tours in Europe!")
     }
-  }, [isModalOpen])
+  }, [isModalOpen, selectedExperiences])
 
   // Add this function to handle modal experience selection
   const toggleModalExperience = (experienceId: string) => {
@@ -715,6 +721,38 @@ export default function AffiliateDashboard({ params }: { params: Promise<{ affil
               </DialogDescription>
             </DialogHeader>
 
+            {/* Landing Page Details Form */}
+            <div className="space-y-4 mb-6 border-b border-gray-200 pb-6">
+              <div>
+                <label htmlFor="portfolioName" className="block text-sm font-medium text-gray-700 mb-1">
+                  Portfolio Name
+                </label>
+                <Input
+                  id="portfolioName"
+                  value={portfolioName}
+                  onChange={(e) => setPortfolioName(e.target.value)}
+                  placeholder="My European Adventure"
+                  className="w-full"
+                />
+              </div>
+              
+              <div>
+                <label htmlFor="experienceText" className="block text-sm font-medium text-gray-700 mb-1">
+                  Description
+                </label>
+                <textarea
+                  id="experienceText"
+                  value={experienceText}
+                  onChange={(e) => setExperienceText(e.target.value)}
+                  placeholder="Here are my favorite tours in Europe!"
+                  className="w-full min-h-[100px] px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                />
+                <p className="mt-1 text-xs text-gray-500">
+                  Describe your collection of experiences to help visitors understand what makes them special.
+                </p>
+              </div>
+            </div>
+
             {/* Experience Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-4">
               {HARDCODED_EXPERIENCES.map((experience) => (
@@ -771,7 +809,12 @@ export default function AffiliateDashboard({ params }: { params: Promise<{ affil
               </Button>
               <Button
                 onClick={handleCreateLandingPage}
-                disabled={isCreatingLandingPage || selectedModalExperiences.length === 0}
+                disabled={
+                  isCreatingLandingPage || 
+                  selectedModalExperiences.length === 0 || 
+                  !portfolioName.trim() || 
+                  !experienceText.trim()
+                }
                 className="bg-[#8000FF] hover:bg-purple-700 text-white"
               >
                 {isCreatingLandingPage ? (
@@ -797,9 +840,23 @@ export default function AffiliateDashboard({ params }: { params: Promise<{ affil
               <div className="flex items-center justify-center w-12 h-12 rounded-full bg-green-100">
                 <Check className="w-6 h-6 text-green-600" />
               </div>
-              <p className="text-center text-gray-600">
-                Your landing page has been created successfully. Here's your unique link:
-              </p>
+              <div className="text-center">
+                <div className="bg-purple-50 border border-purple-100 rounded-lg p-4 mb-4">
+                  <h3 className="font-semibold text-lg text-gray-800 mb-2">
+                    {portfolioName}
+                  </h3>
+                  <p className="text-gray-600 text-sm italic">
+                    "{experienceText}"
+                  </p>
+                  <div className="mt-3 pt-3 border-t border-purple-100 flex items-center justify-center text-sm text-purple-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2"><rect width="7" height="7" x="3" y="3" rx="1"></rect><rect width="7" height="7" x="14" y="3" rx="1"></rect><rect width="7" height="7" x="14" y="14" rx="1"></rect><rect width="7" height="7" x="3" y="14" rx="1"></rect></svg>
+                    {selectedModalExperiences.length} {selectedModalExperiences.length === 1 ? 'experience' : 'experiences'} included
+                  </div>
+                </div>
+                <p className="text-gray-600 mb-4">
+                  Your landing page has been created successfully. Here's your unique link:
+                </p>
+              </div>
               <div className="flex items-center w-full max-w-sm space-x-2">
                 <Input 
                   readOnly 
@@ -823,12 +880,22 @@ export default function AffiliateDashboard({ params }: { params: Promise<{ affil
                 </Button>
               </div>
             </div>
-            <DialogFooter className="sm:justify-center">
+            <DialogFooter className="sm:justify-center flex gap-3">
               <Button
                 variant="outline"
                 onClick={() => setIsSuccessModalOpen(false)}
               >
                 Close
+              </Button>
+              <Button
+                onClick={() => {
+                  window.open(`/recommendations/${landingPageId}`, "_blank");
+                  setIsSuccessModalOpen(false);
+                }}
+                className="bg-[#8000FF] hover:bg-purple-700 text-white"
+              >
+                <ExternalLink className="w-4 h-4 mr-2" />
+                View Page
               </Button>
             </DialogFooter>
           </DialogContent>

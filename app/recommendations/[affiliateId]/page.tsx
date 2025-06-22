@@ -131,15 +131,25 @@ export default function AffiliateRecommendations({ params }: { params: Promise<{
       
       try {
         const firstTourId = tourDetails[0].tourId
-        const restrictedTourIds = tourDetails
-          .slice(1)
-          .map(tour => tour.tourId)
-          .join(',')
+        
+        // Only add restricted tour IDs if there are more than one tour
+        let apiUrl = `https://api-ho.headout.com/api/v6/tour-groups/${firstTourId}/similar-products/?limit=10`
+        
+        if (tourDetails.length > 1) {
+          const restrictedTourIds = tourDetails
+            .slice(1)
+            .map(tour => tour.tourId)
+            .join(',')
+          apiUrl += `&restricted-tgids=${restrictedTourIds}`
+          console.log(`Adding restricted tour IDs: ${restrictedTourIds}`)
+        } else {
+          console.log(`Only one tour found, not adding restricted-tgids parameter`)
+        }
 
-        console.log(`Fetching similar tours for tour ID: ${firstTourId}`)
+        console.log(`Fetching similar tours with URL: ${apiUrl}`)
         
         const similarToursResponse = await fetch(
-          `https://api-ho.headout.com/api/v6/tour-groups/${firstTourId}/similar-products/?limit=10&restricted-tgids=${restrictedTourIds}`,
+          apiUrl,
           {
             method: 'GET',
             headers: {
