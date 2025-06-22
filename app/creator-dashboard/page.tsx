@@ -245,7 +245,7 @@ export default function AffiliateRecommendations({ params }: { params: Promise<{
 
               <div className="flex flex-wrap justify-center md:justify-start gap-6 mb-6">
                 <div className="text-center">
-                  <div className="text-2xl font-bold">{affiliateData.influencer.followers}</div>
+                  {/* <div className="text-2xl font-bold">{affiliateData.influencer.followers}</div> */}
                   <div className="text-purple-200 text-sm">Followers</div>
                 </div>
                 <div className="text-center">

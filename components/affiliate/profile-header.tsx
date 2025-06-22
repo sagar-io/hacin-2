@@ -38,10 +38,7 @@ export function ProfileHeader({ influencer }: ProfileHeaderProps) {
             <p className="text-purple-50 mb-6 max-w-2xl leading-relaxed">{influencer.bio}</p>
 
             <div className="flex flex-wrap justify-center md:justify-start gap-6 mb-6">
-              <div className="text-center">
-                <div className="text-2xl font-bold">{influencer.followers}</div>
-                <div className="text-purple-200 text-sm">Followers</div>
-              </div>
+              
               <div className="text-center">
                 <div className="text-2xl font-bold">{influencer.experiences}</div>
                 <div className="text-purple-200 text-sm">Experiences</div>
