@@ -11,6 +11,12 @@ interface TourDetail {
   tourName: string
   summary: string | null
   mediaUrls: string | null
+  location: string
+  price: string
+  rating: number
+  reviews: number
+  duration: string
+  category: string
 }
 
 interface LandingPageResponse {
@@ -229,16 +235,16 @@ export default function AffiliateRecommendations({ params }: { params: Promise<{
               <ExperienceCard 
                 key={tour.tourId} 
                 experience={{
-                  id: tour.tourId.toString(),
-                  title: tour.tourName,
-                  description: tour.summary || "No description available",
-                  image: tour.mediaUrls || "/placeholder.jpg",
-                  location: "Dubai", // Default location since it's not in the API
-                  price: "Contact for price",
-                  rating: 4.5, // Default rating since it's not in the API
-                  reviews: 0,
-                  duration: "Flexible",
-                  category: "Tour"
+                  id: tour.tourId?.toString() ?? "",
+                  title: tour.tourName ?? "",
+                  description: tour.summary ?? "",
+                  image: tour.mediaUrls ?? "/placeholder.jpg",
+                  location: tour.location ?? "",
+                  price: tour.price ?? "",
+                  rating: tour.rating ?? 0,
+                  reviews: tour.reviews ?? 0,
+                  duration: tour.duration ?? "",
+                  category: tour.category ?? ""
                 }}
                 variant="featured" 
                 showBookButton={true}
