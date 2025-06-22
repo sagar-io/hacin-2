@@ -79,7 +79,7 @@ export default function AffiliateRecommendations({ params }: { params: Promise<{
     name: "Sarah Adventures",
     username: "@sarahadventures",
     bio: "Professional travel blogger and adventure seeker. Exploring the world one destination at a time. Sharing authentic travel experiences and hidden gems from around the globe.",
-    avatar: "/placeholder-user.jpg",
+    avatar: "https://www.gravatar.com/avatar/2c7d99fe281ecd3bcd65ab915bac6dd5?s=250",
     followers: "50K+",
     experiences: 120,
     countries: 45,
