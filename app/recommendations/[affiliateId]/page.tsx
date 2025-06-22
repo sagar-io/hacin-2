@@ -84,13 +84,13 @@ export default function AffiliateRecommendations({ params }: { params: Promise<{
 
   // Hardcoded profile data
   const profileData = {
-    name: "Anita Pinter",
-    username: "@welcomearound",
-    bio: "Travel enthusiast & adventure seeker 🌍 Sharing amazing experiences from around the globe ✈️ Partnered with Headout for the best travel deals!",
-    avatar: "/placeholder.svg?height=120&width=120",
-    followers: "125K",
-    experiences: 47,
-    countries: 23,
+    name: "Sarah Adventures",
+    username: "@sarahadventures",
+    bio: "Professional travel blogger and adventure seeker. Exploring the world one destination at a time. Sharing authentic travel experiences and hidden gems from around the globe.",
+    avatar: "https://plus.unsplash.com/premium_photo-1688740375397-34605b6abe48?q=80&w=2069&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    followers: "50K+",
+    experiences: 120,
+    countries: 45,
     socialLinks: {
       instagram: "https://instagram.com/welcomearound",
       youtube: "https://youtube.com/welcomearound",
@@ -139,15 +139,25 @@ export default function AffiliateRecommendations({ params }: { params: Promise<{
       
       try {
         const firstTourId = tourDetails[0].tourId
-        const restrictedTourIds = tourDetails
-          .slice(1)
-          .map(tour => tour.tourId)
-          .join(',')
+        
+        // Only add restricted tour IDs if there are more than one tour
+        let apiUrl = `https://api-ho.headout.com/api/v6/tour-groups/${firstTourId}/similar-products/?limit=10`
+        
+        if (tourDetails.length > 1) {
+          const restrictedTourIds = tourDetails
+            .slice(1)
+            .map(tour => tour.tourId)
+            .join(',')
+          apiUrl += `&restricted-tgids=${restrictedTourIds}`
+          console.log(`Adding restricted tour IDs: ${restrictedTourIds}`)
+        } else {
+          console.log(`Only one tour found, not adding restricted-tgids parameter`)
+        }
 
-        console.log(`Fetching similar tours for tour ID: ${firstTourId}`)
+        console.log(`Fetching similar tours with URL: ${apiUrl}`)
         
         const similarToursResponse = await fetch(
-          `https://api-ho.headout.com/api/v6/tour-groups/${firstTourId}/similar-products/?limit=10&restricted-tgids=${restrictedTourIds}`,
+          apiUrl,
           {
             method: 'GET',
             headers: {
@@ -208,10 +218,13 @@ export default function AffiliateRecommendations({ params }: { params: Promise<{
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-gradient-to-r from-[#8000FF] to-purple-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold">H</span>
-              </div>
-              <span className="text-xl font-bold text-gray-900">Headout</span>
+              <img 
+                src="https://cdn-imgix-open.headout.com/logo/svg/Headout_logo_purps.svg?w=229.5&h=36&fm=svg&crop=faces&auto=compress%2Cformat&fit=min" 
+                alt="Headout" 
+                width="153"
+                height="23"
+                style={{ width: "153px", height: "23px" }}
+              />
             </div>
           </div>
         </div>
