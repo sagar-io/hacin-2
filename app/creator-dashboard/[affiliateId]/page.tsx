@@ -580,8 +580,7 @@ export default function AffiliateDashboard({ params }: { params: Promise<{ affil
   }
 
   const getShareableUrl = () => {
-    const baseUrl = typeof window !== "undefined" ? window.location.origin : ""
-    return `${baseUrl}/affiliate-recommendations/${resolvedParams.affiliateId}${
+    return `https://hacin-2-glia.vercel.app/affiliate-recommendations/${resolvedParams.affiliateId}${
       selectedExperiences.length > 0 ? `?experiences=${selectedExperiences.join(",")}` : ""
     }`
   }
@@ -706,7 +705,7 @@ export default function AffiliateDashboard({ params }: { params: Promise<{ affil
 
   // Handle sharing landing page URL
   const handleShareLandingPage = (pageId: string) => {
-    const url = `${window.location.origin}/recommendations/${pageId}`;
+    const url = `https://hacin-2-glia.vercel.app/recommendations/${pageId}`;
     navigator.clipboard.writeText(url);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
@@ -935,7 +934,7 @@ export default function AffiliateDashboard({ params }: { params: Promise<{ affil
                                 size="sm"
                                 variant="outline"
                                 className="hover:bg-gray-50"
-                                onClick={() => window.open(`/recommendations/${page.pageId}`, "_blank")}
+                                onClick={() => window.open(`https://hacin-2-glia.vercel.app/recommendations/${page.pageId}`, "_blank")}
                               >
                                 <ExternalLink className="w-4 h-4 mr-2" />
                                 View Page
@@ -1101,13 +1100,13 @@ export default function AffiliateDashboard({ params }: { params: Promise<{ affil
               <div className="flex items-center w-full max-w-sm space-x-2">
                 <Input 
                   readOnly 
-                  value={`localhost:3000/recommendations/${landingPageId}`}
+                  value={`https://hacin-2-glia.vercel.app/recommendations/${landingPageId}`}
                   className="flex-1 px-2 py-1 text-sm border rounded bg-gray-50"
                 />
                 <Button
                   size="sm"
                   onClick={async () => {
-                    await navigator.clipboard.writeText(`localhost:3000/recommendations/${landingPageId}`)
+                    await navigator.clipboard.writeText(`https://hacin-2-glia.vercel.app/recommendations/${landingPageId}`)
                     setCopied(true)
                     setTimeout(() => setCopied(false), 2000)
                   }}
@@ -1130,7 +1129,7 @@ export default function AffiliateDashboard({ params }: { params: Promise<{ affil
               </Button>
               <Button
                 onClick={() => {
-                  window.open(`/recommendations/${landingPageId}`, "_blank");
+                  window.open(`https://hacin-2-glia.vercel.app/recommendations/${landingPageId}`, "_blank");
                   setIsSuccessModalOpen(false);
                 }}
                 className="bg-[#8000FF] hover:bg-purple-700 text-white"
