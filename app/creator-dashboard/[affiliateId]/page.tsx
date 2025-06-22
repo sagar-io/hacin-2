@@ -66,6 +66,30 @@ const getMockAffiliateData = (affiliateId: string): AffiliateData => ({
   },
   experiences: [
     {
+      id: "10479",
+      title: "St. Peter's Basilica Dome: Guided Tour",
+      location: "Rome, Italy",
+      price: "€40.00",
+      rating: 4.8,
+      reviews: 5200,
+      duration: "2 hours",
+      category: "Religious",
+      image: "https://cdn-imgix.headout.com/media/images/55ea0fc4c24549de8666d4a0f484fa28-10479-rome-st.-peter-s-basilica-dome-guided-tour-with-optional-breakfast-11.jpg",
+      description: "Ascend to the top of St. Peter's Basilica Dome with a guide and enjoy breathtaking views of Rome. Includes optional breakfast."
+    },
+    {
+      id: "2819",
+      title: "Tower Bridge Tickets",
+      location: "London, UK",
+      price: "£12.00",
+      rating: 4.6,
+      reviews: 8000,
+      duration: "1 hour",
+      category: "Landmarks",
+      image: "https://cdn-imgix.headout.com/media/images/251a132693d618b23f691880422ef6ae-2891-london-tower-bridge-and-engine-room-entry-tickets-02.jpg",
+      description: "Visit the iconic Tower Bridge in London and explore its high-level walkways and Victorian engine rooms."
+    },
+    {
       id: "3075",
       title: "Guided Tour with Skip the Line Access to Colosseum, Roman Forum & Palatine",
       location: "Rome, Italy",
@@ -183,7 +207,7 @@ const getMockAffiliateData = (affiliateId: string): AffiliateData => ({
       duration: "2.5 hours",
       category: "Religious",
       image: "https://cdn-imgix.headout.com/media/images/86dc52bfded0c4e9be76783326ddcb48-3361-Rome-St.Peter-sBasilicaGuidedTour-12.jpg",
-      description: "Explore the largest church in the world and discover what makes St. Peter's Basilica one of the most popular architectural works from the Renaissance.",
+      description: "Explore the largest church in the world and discover what makes St. Peter's Basilica one of the most popular architectural works from the Renaissance. Go on a guided tour of basilica in the company of an official Vatican guide and learn all you need to learn about the holiest of Catholic shrines.",
     },
     {
       id: "3728",
@@ -334,6 +358,30 @@ const HARDCODED_EXPERIENCES = [
     category: "Religious",
     image: "https://cdn-imgix.headout.com/media/images/86dc52bfded0c4e9be76783326ddcb48-3361-Rome-St.Peter-sBasilicaGuidedTour-12.jpg",
     description: "Explore the largest church in the world and discover what makes St. Peter's Basilica one of the most popular architectural works from the Renaissance. Go on a guided tour of basilica in the company of an official Vatican guide and learn all you need to learn about the holiest of Catholic shrines."
+  },
+  {
+    id: "10479",
+    title: "St. Peter's Basilica Dome: Guided Tour",
+    location: "Rome, Italy",
+    price: "€40.00",
+    rating: 4.8,
+    reviews: 5200,
+    duration: "2 hours",
+    category: "Religious",
+    image: "https://cdn-imgix.headout.com/media/images/55ea0fc4c24549de8666d4a0f484fa28-10479-rome-st.-peter-s-basilica-dome-guided-tour-with-optional-breakfast-11.jpg",
+    description: "Ascend to the top of St. Peter's Basilica Dome with a guide and enjoy breathtaking views of Rome. Includes optional breakfast."
+  },
+  {
+    id: "2819",
+    title: "Tower Bridge Tickets",
+    location: "London, UK",
+    price: "£12.00",
+    rating: 4.6,
+    reviews: 8000,
+    duration: "1 hour",
+    category: "Landmarks",
+    image: "https://cdn-imgix.headout.com/media/images/251a132693d618b23f691880422ef6ae-2891-london-tower-bridge-and-engine-room-entry-tickets-02.jpg",
+    description: "Visit the iconic Tower Bridge in London and explore its high-level walkways and Victorian engine rooms."
   }
 ];
 
