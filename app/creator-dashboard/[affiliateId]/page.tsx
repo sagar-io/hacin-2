@@ -18,6 +18,7 @@ import {
 import { Check, Copy, Star, Share2, Loader2, Calendar, MapPin, ChevronRight, Eye, DollarSign, ExternalLink, Users } from "lucide-react"
 import { ExperienceCard } from "@/components/affiliate/experience-card"
 import { ProfileHeader } from "@/components/affiliate/profile-header"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
 // Custom styles for tab animations
 const tabAnimationStyles = `
@@ -97,10 +98,10 @@ interface AffiliateData {
 // Mock API response
 const getMockAffiliateData = (affiliateId: string): AffiliateData => ({
   influencer: {
-    name: "Anita Pinter",
+    name: "Sarah Adventures",
     username: "@welcomearound",
     bio: "Travel enthusiast & adventure seeker 🌍 Sharing amazing experiences from around the globe ✈️ Partnered with Headout for the best travel deals!",
-    avatar: "https://plus.unsplash.com/premium_photo-1688740375397-34605b6abe48?q=80&w=2069&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=988&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     followers: "125K",
     experiences: 47,
     countries: 23,
@@ -369,18 +370,6 @@ const HARDCODED_EXPERIENCES = [
     image: "https://cdn-imgix.headout.com/media/images/000bd87572e5d639ae4ae574023036e8-3361-rome-guided-tour-of-saint-peter-s-basilica-cupola-01.jpg",
     description: "Experience the best of Rome with this full-day guided combo tour of the Vatican Museums, Sistine Chapel, St. Peter's Basilica, Colosseum, Palatine Hill and Roman Forum. With your priority access ticket, skip the long entry lines at these popular sites and make the most of your time in this fascinating city."
   },
-  {
-    id: "3361",
-    title: "St. Peter's Basilica and Papal Tombs Guided Tour",
-    location: "Rome, Italy",
-    price: "€48.00",
-    rating: 4.7,
-    reviews: 7456,
-    duration: "2.5 hours",
-    category: "Religious",
-    image: "https://cdn-imgix.headout.com/media/images/86dc52bfded0c4e9be76783326ddcb48-3361-Rome-St.Peter-sBasilicaGuidedTour-12.jpg",
-    description: "Explore the largest church in the world and discover what makes St. Peter's Basilica one of the most popular architectural works from the Renaissance. Go on a guided tour of basilica in the company of an official Vatican guide and learn all you need to learn about the holiest of Catholic shrines."
-  }
 ];
 
 // Interface for landing pages from the API
@@ -675,15 +664,24 @@ export default function AffiliateDashboard({ params }: { params: Promise<{ affil
             <div className="absolute inset-0 bg-gradient-to-r from-purple-100 to-blue-50 rounded-full h-12 blur-md opacity-50"></div>
             <TabsList className="relative grid w-full grid-cols-2 h-12 p-1 bg-white/80 backdrop-blur-sm rounded-full shadow-md border border-purple-100 transition-all duration-300 ease-in-out">
               <div className="absolute inset-0 rounded-full bg-gradient-to-r from-purple-50/50 to-blue-50/50 opacity-70 pointer-events-none"></div>
-              <TabsTrigger 
-                value="experiences" 
-                className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#8000FF] data-[state=active]:to-purple-600 data-[state=active]:text-white rounded-full transition-all duration-300 data-[state=active]:shadow-md flex items-center justify-center gap-2 relative overflow-hidden group tab-trigger-hover"
-              >
-                <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-purple-600/20 to-blue-500/20 opacity-0 group-hover:opacity-100 group-data-[state=active]:opacity-0 transition-opacity"></span>
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-layout-grid"><rect width="7" height="7" x="3" y="3" rx="1"></rect><rect width="7" height="7" x="14" y="3" rx="1"></rect><rect width="7" height="7" x="14" y="14" rx="1"></rect><rect width="7" height="7" x="3" y="14" rx="1"></rect></svg>
-                <span className="relative z-10">Experiences</span>
-                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 h-1 w-10 rounded-t-full bg-[#8000FF] opacity-0 data-[state=active]:opacity-100 transition-opacity duration-300"></span>
-              </TabsTrigger>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <TabsTrigger 
+                      value="experiences" 
+                      className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#8000FF] data-[state=active]:to-purple-600 data-[state=active]:text-white rounded-full transition-all duration-300 data-[state=active]:shadow-md flex items-center justify-center gap-2 relative overflow-hidden group tab-trigger-hover"
+                    >
+                      <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-purple-600/20 to-blue-500/20 opacity-0 group-hover:opacity-100 group-data-[state=active]:opacity-0 transition-opacity"></span>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-layout-grid"><rect width="7" height="7" x="3" y="3" rx="1"></rect><rect width="7" height="7" x="14" y="3" rx="1"></rect><rect width="7" height="7" x="14" y="14" rx="1"></rect><rect width="7" height="7" x="3" y="14" rx="1"></rect></svg>
+                      <span className="relative z-10">My Headout Experiences</span>
+                      <span className="absolute bottom-0 left-1/2 -translate-x-1/2 h-1 w-10 rounded-t-full bg-[#8000FF] opacity-0 data-[state=active]:opacity-100 transition-opacity duration-300"></span>
+                    </TabsTrigger>
+                  </TooltipTrigger>
+                  <TooltipContent side="top" className="max-w-xs bg-white text-gray-700 p-3 shadow-lg border border-purple-100 z-[100]">
+                    This section will automatically showcase all the experiences you've added through Headout — no manual updates needed!
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
               <TabsTrigger 
                 value="landing" 
                 className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#8000FF] data-[state=active]:to-purple-600 data-[state=active]:text-white rounded-full transition-all duration-300 data-[state=active]:shadow-md flex items-center justify-center gap-2 relative overflow-hidden group tab-trigger-hover"
@@ -744,10 +742,6 @@ export default function AffiliateDashboard({ params }: { params: Promise<{ affil
           
           {/* Tab 2: Your Landing Pages */}
           <TabsContent value="landing" className="animate-in fade-in-50 slide-in-from-bottom-5 duration-500 tab-content-animate">
-            <h2 className="text-2xl font-bold text-gray-800 mb-6">
-              Landing Pages Analytics
-            </h2>
-            
             {isLandingPagesLoading && (
               <div className="text-center py-8">
                 <div className="w-10 h-10 border-2 border-t-2 border-[#8000FF] rounded-full animate-spin mx-auto mb-3"></div>
@@ -856,20 +850,6 @@ export default function AffiliateDashboard({ params }: { params: Promise<{ affil
                     </Card>
                   </div>
                 ))}
-              </div>
-            )}
-            
-            {!isLandingPagesLoading && landingPages.length > 0 && (
-              <div className="mt-8 flex justify-center">
-                <Button 
-                  onClick={() => {
-                    setActiveTab("experiences");
-                    setTimeout(() => setIsModalOpen(true), 100);
-                  }}
-                  className="bg-[#8000FF] hover:bg-purple-700 text-white"
-                >
-                  Create New Landing Page
-                </Button>
               </div>
             )}
           </TabsContent>

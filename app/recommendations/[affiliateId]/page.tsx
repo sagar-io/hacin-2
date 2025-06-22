@@ -87,7 +87,7 @@ export default function AffiliateRecommendations({ params }: { params: Promise<{
     name: "Sarah Adventures",
     username: "@sarahadventures",
     bio: "Professional travel blogger and adventure seeker. Exploring the world one destination at a time. Sharing authentic travel experiences and hidden gems from around the globe.",
-    avatar: "https://plus.unsplash.com/premium_photo-1688740375397-34605b6abe48?q=80&w=2069&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=988&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     followers: "50K+",
     experiences: 120,
     countries: 45,
@@ -236,15 +236,12 @@ export default function AffiliateRecommendations({ params }: { params: Promise<{
       <div className="container mx-auto px-4 py-8">
         {/* Portfolio Name and Description */}
         <div className="mb-8 text-center">
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">{pageData.portfolioName}</h1>
-          <p className="text-lg text-gray-600">{pageData.experienceText}</p>
+          <h1 className="text-left text-3xl font-bold text-gray-900 mb-4">{pageData.portfolioName}</h1>
+          <p className="text-left text-lg text-gray-600">{pageData.experienceText}</p>
         </div>
 
         {/* Main Recommendations */}
         <div className="mb-12">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">
-            Recommended Experiences
-          </h2>
           <div className="grid grid-cols-1 gap-6">
             {pageData.tourDetails.map((tour) => (
               <ExperienceCard 
@@ -254,12 +251,12 @@ export default function AffiliateRecommendations({ params }: { params: Promise<{
                   title: tour.tourName ?? "",
                   description: tour.summary ?? "",
                   image: tour.mediaUrls ?? "/placeholder.jpg",
-                  location: tour.location ?? "",
-                  price: tour.price ?? "",
-                  rating: tour.rating ?? 0,
-                  reviews: tour.reviews ?? 0,
-                  duration: tour.duration ?? "",
-                  category: tour.category ?? "",
+                  location: tour.location ?? "Rome",
+                  price: tour.price ?? `$${Math.floor(Math.random() * 100) + 1}`,
+                  rating: tour.rating ?? 4.3,
+                  reviews: tour.reviews ?? 10700,
+                  duration: tour.duration ?? "2 Hours",
+                  category: tour.category ?? "Tour",
                   url: tour.url || "https://www.headout.com/colosseum-tickets/priority-tickets-to-colosseum-roman-forum-palatine-hill-fast-track-entry-tickets-e-7148/"
                 }}
                 variant="featured" 
@@ -292,6 +289,7 @@ export default function AffiliateRecommendations({ params }: { params: Promise<{
             <p className="text-gray-500 text-center py-6">No similar experiences found</p>
           )}
           
+          {/* Similar tours grid with clickable cards that redirect to tour URLs */}
           {!isSimilarToursLoading && similarTours.length > 0 && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {similarTours.map((tour) => (
@@ -308,7 +306,7 @@ export default function AffiliateRecommendations({ params }: { params: Promise<{
                     category: tour.category || "Tour",
                     image: tour.imageUrl || "/placeholder.jpg",
                     description: tour.shortSummary || tour.summary || "No description available",
-                    url: tour.url || ""
+                    url: tour.url || `https://www.headout.com/tour/${tour.id}`
                   }}
                   variant="grid" 
                   showBookButton={true}

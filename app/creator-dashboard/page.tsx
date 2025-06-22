@@ -57,7 +57,7 @@ interface AffiliateData {
 // Mock API response
 const getMockAffiliateData = (affiliateId: string): AffiliateData => ({
   influencer: {
-    name: "Anita Pinter",
+    name: "Sarah Adventures",
     username: "@welcomearound",
     bio: "Travel enthusiast & adventure seeker 🌍 Sharing amazing experiences from around the globe ✈️ Partnered with Headout for the best travel deals!",
     avatar: "/placeholder.svg?height=120&width=120",
