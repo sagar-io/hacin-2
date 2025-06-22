@@ -63,6 +63,40 @@ const tabAnimationStyles = `
     animation: pulse 0.5s ease-in-out;
     box-shadow: 0 0 0 2px rgba(128, 0, 255, 0.1);
   }
+  
+  /* Custom styles for active and inactive tabs */
+  .tab-active {
+    background: linear-gradient(to right, #8000FF, #9333ea);
+    color: white !important;
+    box-shadow: 0 4px 12px rgba(128, 0, 255, 0.25);
+    transform: translateY(-2px);
+    font-weight: normal;
+    border: 2px solid transparent;
+  }
+  
+  .tab-active svg {
+    color: white;
+  }
+  
+  .tab-active:hover {
+    background: linear-gradient(to right, #7000e0, #8428d8);
+  }
+  
+  .tab-inactive {
+    background: rgba(255, 255, 255, 0.8);
+    color: #6b7280;
+    border: 2px solid transparent;
+    font-weight: normal;
+  }
+  
+  .tab-inactive:hover {
+    color: #8000FF;
+    border-color: rgba(128, 0, 255, 0.2);
+  }
+  
+  .tab-inactive:hover svg {
+    color: #8000FF;
+  }
 `;
 
 // Mock data structure that would come from the API
@@ -466,6 +500,11 @@ export default function AffiliateDashboard({ params }: { params: Promise<{ affil
   const [portfolioName, setPortfolioName] = useState<string>("")
   const [experienceText, setExperienceText] = useState<string>("")
 
+  // Function to get tab class based on active state
+  const getTabClass = (tabValue: string) => {
+    return tabValue === activeTab ? "tab-active" : "tab-inactive";
+  };
+
   // Fetch affiliate data
   useEffect(() => {
     const initializeAffiliate = async () => {
@@ -727,7 +766,7 @@ export default function AffiliateDashboard({ params }: { params: Promise<{ affil
                   <TooltipTrigger asChild>
                     <TabsTrigger 
                       value="experiences" 
-                      className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#8000FF] data-[state=active]:to-purple-600 data-[state=active]:text-white rounded-full transition-all duration-300 data-[state=active]:shadow-md flex items-center justify-center gap-2 relative overflow-hidden group tab-trigger-hover"
+                      className={`rounded-full transition-all duration-300 flex items-center justify-center gap-2 relative overflow-hidden group ${getTabClass("experiences")} tab-trigger-hover`}
                     >
                       <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-purple-600/20 to-blue-500/20 opacity-0 group-hover:opacity-100 group-data-[state=active]:opacity-0 transition-opacity"></span>
                       <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-layout-grid"><rect width="7" height="7" x="3" y="3" rx="1"></rect><rect width="7" height="7" x="14" y="3" rx="1"></rect><rect width="7" height="7" x="14" y="14" rx="1"></rect><rect width="7" height="7" x="3" y="14" rx="1"></rect></svg>
@@ -741,7 +780,7 @@ export default function AffiliateDashboard({ params }: { params: Promise<{ affil
                 </Tooltip>
                 <TabsTrigger 
                   value="landing" 
-                  className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#8000FF] data-[state=active]:to-purple-600 data-[state=active]:text-white rounded-full transition-all duration-300 data-[state=active]:shadow-md flex items-center justify-center gap-2 relative overflow-hidden group tab-trigger-hover"
+                  className={`rounded-full transition-all duration-300 flex items-center justify-center gap-2 relative overflow-hidden group ${getTabClass("landing")} tab-trigger-hover`}
                 >
                   <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-purple-600/20 to-blue-500/20 opacity-0 group-hover:opacity-100 group-data-[state=active]:opacity-0 transition-opacity"></span>
                   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-bar-chart-3"><path d="M3 3v18h18"></path><path d="M18 17V9"></path><path d="M13 17V5"></path><path d="M8 17v-3"></path></svg>

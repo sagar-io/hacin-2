@@ -41,10 +41,9 @@ export function ExperienceCard({
   }
 
   const handleCardClick = (e: React.MouseEvent) => {
+    console.log("experience", experience.id)
     if (showSelectButton) return
-    if (experience.url) {
-      window.open(experience.url, '_blank')
-    }
+      window.open(`https://www.headout.com/roman-catacombs-tour/the-original-rome-capuchin-crypts-and-catacombs-tour-e-${experience.id.toString()}/`, '_blank')
   }
 
   console.log("experience", experience)
