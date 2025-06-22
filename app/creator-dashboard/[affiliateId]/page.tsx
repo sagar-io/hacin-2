@@ -4,8 +4,9 @@ import { useState, useEffect } from "react"
 import { use } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
   Dialog,
   DialogContent,
@@ -14,9 +15,55 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
-import { Check, Copy, Star, Share2, Loader2 } from "lucide-react"
+import { Check, Copy, Star, Share2, Loader2, Calendar, MapPin, ChevronRight, Eye, DollarSign, ExternalLink, Users } from "lucide-react"
 import { ExperienceCard } from "@/components/affiliate/experience-card"
 import { ProfileHeader } from "@/components/affiliate/profile-header"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+
+// Custom styles for tab animations
+const tabAnimationStyles = `
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  @keyframes scaleIn {
+    from { transform: scale(0.95); }
+    to { transform: scale(1); }
+  }
+  
+  @keyframes slideIn {
+    from { transform: translateX(20px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+  
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.03); }
+    100% { transform: scale(1); }
+  }
+  
+  .tab-content-animate {
+    animation: fadeIn 0.4s ease-out, scaleIn 0.3s ease-out;
+  }
+  
+  .tab-item-animate {
+    animation: slideIn 0.3s ease-out forwards;
+    opacity: 0;
+  }
+  
+  .tab-item-animate:nth-child(1) { animation-delay: 0.05s; }
+  .tab-item-animate:nth-child(2) { animation-delay: 0.1s; }
+  .tab-item-animate:nth-child(3) { animation-delay: 0.15s; }
+  .tab-item-animate:nth-child(4) { animation-delay: 0.2s; }
+  .tab-item-animate:nth-child(5) { animation-delay: 0.25s; }
+  .tab-item-animate:nth-child(6) { animation-delay: 0.3s; }
+  
+  .tab-trigger-hover:hover {
+    animation: pulse 0.5s ease-in-out;
+    box-shadow: 0 0 0 2px rgba(128, 0, 255, 0.1);
+  }
+`;
 
 // Mock data structure that would come from the API
 interface AffiliateData {
@@ -51,10 +98,10 @@ interface AffiliateData {
 // Mock API response
 const getMockAffiliateData = (affiliateId: string): AffiliateData => ({
   influencer: {
-    name: "Anita Pinter",
+    name: "Sarah Adventures",
     username: "@welcomearound",
     bio: "Travel enthusiast & adventure seeker 🌍 Sharing amazing experiences from around the globe ✈️ Partnered with Headout for the best travel deals!",
-    avatar: "/placeholder.svg?height=120&width=120",
+    avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=988&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     followers: "125K",
     experiences: 47,
     countries: 23,
@@ -385,6 +432,22 @@ const HARDCODED_EXPERIENCES = [
   }
 ];
 
+// Interface for landing pages from the API
+interface UserLandingPage {
+  pageId: string
+  status: "DRAFT" | "PUBLISHED"
+  influencerId: string
+  lastVisitedDate: string
+  portfolioName: string
+  experienceText: string
+  tourDetails: any[]
+  // Additional analytics data (hardcoded)
+  viewers?: number
+  revenue?: number
+  conversions?: number
+  thumbnail?: string
+}
+
 export default function AffiliateDashboard({ params }: { params: Promise<{ affiliateId: string }> }) {
   const resolvedParams = use(params)
   const searchParams = useSearchParams()
@@ -398,6 +461,12 @@ export default function AffiliateDashboard({ params }: { params: Promise<{ affil
   const [isCreatingLandingPage, setIsCreatingLandingPage] = useState(false)
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
   const [landingPageId, setLandingPageId] = useState<string>("")
+  const [activeTab, setActiveTab] = useState("experiences")
+  const [landingPages, setLandingPages] = useState<UserLandingPage[]>([])
+  const [isLandingPagesLoading, setIsLandingPagesLoading] = useState(false)
+  const [landingPagesError, setLandingPagesError] = useState<string | null>(null)
+  const [portfolioName, setPortfolioName] = useState<string>("")
+  const [experienceText, setExperienceText] = useState<string>("")
 
   // Fetch affiliate data
   useEffect(() => {
@@ -509,8 +578,8 @@ export default function AffiliateDashboard({ params }: { params: Promise<{ affil
           tourIds: selectedExperiences.map(exp => parseInt(exp.id)),
           status: "PUBLISHED",
           lastVisitedDate: "2023-06-15",
-          portfolioName: "My European Adventure",
-          experienceText: "Here are my favorite tours in Europe!"
+          portfolioName: portfolioName,
+          experienceText: experienceText
         }),
       })
 
@@ -535,8 +604,12 @@ export default function AffiliateDashboard({ params }: { params: Promise<{ affil
   useEffect(() => {
     if (isModalOpen) {
       setSelectedModalExperiences(selectedExperiences)
+    } else {
+      // Reset form fields when modal is closed
+      // setPortfolioName("My European Adventure")
+      // setExperienceText("Here are my favorite tours in Europe!")
     }
-  }, [isModalOpen])
+  }, [isModalOpen, selectedExperiences])
 
   // Add this function to handle modal experience selection
   const toggleModalExperience = (experienceId: string) => {
@@ -546,6 +619,61 @@ export default function AffiliateDashboard({ params }: { params: Promise<{ affil
         : [...prev, experienceId]
     )
   }
+
+  // Fetch user landing pages for the second tab
+  useEffect(() => {
+    if (activeTab !== "landing") return;
+    
+    const fetchUserLandingPages = async () => {
+      setIsLandingPagesLoading(true);
+      setLandingPagesError(null);
+      
+      try {
+        const response = await fetch(`https://googlettd.api.dev-headout.com/api/v8/affiliate/users/2960031/landing-pages`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        
+        if (!response.ok) {
+          throw new Error(`Failed to fetch landing pages: ${response.status}`);
+        }
+        
+        const data: UserLandingPage[] = await response.json();
+        
+        // Add hardcoded analytics data to each landing page
+        const enhancedData = data.map((page, index) => ({
+          ...page,
+          viewers: 5000 + Math.floor(Math.random() * 8000),
+          revenue: 2000 + Math.floor(Math.random() * 7000),
+          conversions: 10 + Math.floor(Math.random() * 20),
+          thumbnail: [
+            "https://cdn-imgix.headout.com/media/images/50bae31b370027fe4798b664858fa80a-3586-10.jpg",
+            "https://cdn-imgix.headout.com/media/images/6c6519b8db7ddab3f5381d54ee30032a-Frame-banner.jpg",
+            "/placeholder.jpg"
+          ][index % 3]
+        }));
+        
+        setLandingPages(enhancedData);
+      } catch (err) {
+        console.error('Error fetching landing pages:', err);
+        setLandingPagesError(err instanceof Error ? err.message : 'Failed to load landing pages');
+      } finally {
+        setIsLandingPagesLoading(false);
+      }
+    };
+    
+    fetchUserLandingPages();
+  }, [activeTab]);
+
+  // Handle sharing landing page URL
+  const handleShareLandingPage = (pageId: string) => {
+    const url = `${window.location.origin}/recommendations/${pageId}`;
+    navigator.clipboard.writeText(url);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   if (!affiliateData) {
     return (
@@ -560,17 +688,23 @@ export default function AffiliateDashboard({ params }: { params: Promise<{ affil
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-white">
+      {/* Inject custom animation styles */}
+      <style dangerouslySetInnerHTML={{ __html: tabAnimationStyles }} />
+      
       {/* Header */}
       <header className="bg-white shadow-sm border-b border-purple-100">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-gradient-to-r from-[#8000FF] to-purple-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold">H</span>
-              </div>
-              <span className="text-xl font-bold text-gray-900">Headout</span>
+              <img 
+                src="https://cdn-imgix-open.headout.com/logo/svg/Headout_logo_purps.svg?w=229.5&h=36&fm=svg&crop=faces&auto=compress%2Cformat&fit=min" 
+                alt="Headout" 
+                width="153"
+                height="23"
+                style={{ width: "153px", height: "23px" }}
+              />
             </div>
-            {selectedExperiences.length > 0 && (
+            {selectedExperiences.length > 0 && activeTab === "experiences" && (
               <Button onClick={copyToClipboard} size="sm" className="bg-[#8000FF] hover:bg-purple-700 text-white">
                 {copied ? <Check className="w-4 h-4 mr-2" /> : <Copy className="w-4 h-4 mr-2" />}
                 {copied ? "Copied!" : "Share Portfolio"}
@@ -584,47 +718,202 @@ export default function AffiliateDashboard({ params }: { params: Promise<{ affil
       <ProfileHeader influencer={affiliateData.influencer} />
 
       <div className="container mx-auto px-4 py-8">
-        {/* Selected Experiences Summary */}
-        {selectedExperiences.length > 0 && (
-          <div className="mb-6">
-            <Card className="border-2 border-[#8000FF] bg-gradient-to-r from-purple-50 to-white">
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center text-[#8000FF]">
-                    <Share2 className="w-5 h-5 mr-2" />
-                    <span className="font-semibold">
-                      {selectedExperiences.length} experiences selected for your portfolio
-                    </span>
-                  </div>
-                  <div className="text-sm text-gray-600">Selected experiences appear at the top</div>
+        {/* Tabs Navigation */}
+        <TooltipProvider>
+          <Tabs defaultValue="experiences" className="mb-8" onValueChange={setActiveTab}>
+            <div className="relative mb-10">
+              <div className="absolute inset-0 bg-gradient-to-r from-purple-100 to-blue-50 rounded-full h-12 blur-md opacity-50"></div>
+              <TabsList className="relative grid w-full grid-cols-2 h-12 p-1 bg-white/80 backdrop-blur-sm rounded-full shadow-md border border-purple-100 transition-all duration-300 ease-in-out">
+                <div className="absolute inset-0 rounded-full bg-gradient-to-r from-purple-50/50 to-blue-50/50 opacity-70 pointer-events-none"></div>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <TabsTrigger 
+                      value="experiences" 
+                      className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#8000FF] data-[state=active]:to-purple-600 data-[state=active]:text-white rounded-full transition-all duration-300 data-[state=active]:shadow-md flex items-center justify-center gap-2 relative overflow-hidden group tab-trigger-hover"
+                    >
+                      <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-purple-600/20 to-blue-500/20 opacity-0 group-hover:opacity-100 group-data-[state=active]:opacity-0 transition-opacity"></span>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-layout-grid"><rect width="7" height="7" x="3" y="3" rx="1"></rect><rect width="7" height="7" x="14" y="3" rx="1"></rect><rect width="7" height="7" x="14" y="14" rx="1"></rect><rect width="7" height="7" x="3" y="14" rx="1"></rect></svg>
+                      <span className="relative z-10">My Headout Experiences</span>
+                      <span className="absolute bottom-0 left-1/2 -translate-x-1/2 h-1 w-10 rounded-t-full bg-[#8000FF] opacity-0 data-[state=active]:opacity-100 transition-opacity duration-300"></span>
+                    </TabsTrigger>
+                  </TooltipTrigger>
+                  <TooltipContent side="top" className="max-w-xs bg-white text-gray-700 p-3 shadow-lg border border-purple-100 z-[100]">
+                    This section will automatically showcase all the experiences you've added through Headout — no manual updates needed!
+                  </TooltipContent>
+                </Tooltip>
+                <TabsTrigger 
+                  value="landing" 
+                  className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#8000FF] data-[state=active]:to-purple-600 data-[state=active]:text-white rounded-full transition-all duration-300 data-[state=active]:shadow-md flex items-center justify-center gap-2 relative overflow-hidden group tab-trigger-hover"
+                >
+                  <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-purple-600/20 to-blue-500/20 opacity-0 group-hover:opacity-100 group-data-[state=active]:opacity-0 transition-opacity"></span>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-bar-chart-3"><path d="M3 3v18h18"></path><path d="M18 17V9"></path><path d="M13 17V5"></path><path d="M8 17v-3"></path></svg>
+                  <span className="relative z-10">Your Landing Pages</span>
+                  <span className="absolute bottom-0 left-1/2 -translate-x-1/2 h-1 w-10 rounded-t-full bg-[#8000FF] opacity-0 data-[state=active]:opacity-100 transition-opacity duration-300"></span>
+                </TabsTrigger>
+              </TabsList>
+            </div>
+            
+            {/* Tab 1: Experiences */}
+            <TabsContent value="experiences" className="animate-in fade-in-50 slide-in-from-bottom-5 duration-500 tab-content-animate">
+              {/* Selected Experiences Summary */}
+              {selectedExperiences.length > 0 && (
+                <div className="mb-6">
+                  <Card className="border-2 border-[#8000FF] bg-gradient-to-r from-purple-50 to-white">
+                    <CardContent className="p-4">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center text-[#8000FF]">
+                          <Share2 className="w-5 h-5 mr-2" />
+                          <span className="font-semibold">
+                            {selectedExperiences.length} experiences selected for your portfolio
+                          </span>
+                        </div>
+                        <div className="text-sm text-gray-600">Selected experiences appear at the top</div>
+                      </div>
+                    </CardContent>
+                  </Card>
                 </div>
-              </CardContent>
-            </Card>
-          </div>
-        )}
+              )}
 
-        {/* Experiences Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredExperiences.map((experience) => (
-            <ExperienceCard
-              key={experience.id}
-              experience={experience}
-              variant="grid"
-              isSelected={selectedExperiences.includes(experience.id)}
-              onSelect={() => toggleExperience(experience.id)}
-            />
-          ))}
-        </div>
+              {/* Experiences Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredExperiences.map((experience, index) => (
+                  <div key={experience.id} className="tab-item-animate">
+                    <ExperienceCard
+                      experience={experience}
+                      variant="grid"
+                      isSelected={selectedExperiences.includes(experience.id)}
+                      onSelect={() => toggleExperience(experience.id)}
+                    />
+                  </div>
+                ))}
+              </div>
 
-        <div className="mt-8 flex justify-center">
-          <Button 
-            size="lg"
-            onClick={() => setIsModalOpen(true)}
-            className="bg-[#8000FF] hover:bg-purple-700 text-white font-semibold py-4 px-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 min-w-[200px]"
-          >
-            Create Landing Page
-          </Button>
-        </div>
+              <div className="mt-8 flex justify-center">
+                <Button 
+                  size="lg"
+                  onClick={() => setIsModalOpen(true)}
+                  className="bg-[#8000FF] hover:bg-purple-700 text-white font-semibold py-4 px-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 min-w-[200px]"
+                >
+                  Create Landing Page
+                </Button>
+              </div>
+            </TabsContent>
+            
+            {/* Tab 2: Your Landing Pages */}
+            <TabsContent value="landing" className="animate-in fade-in-50 slide-in-from-bottom-5 duration-500 tab-content-animate">
+              {isLandingPagesLoading && (
+                <div className="text-center py-8">
+                  <div className="w-10 h-10 border-2 border-t-2 border-[#8000FF] rounded-full animate-spin mx-auto mb-3"></div>
+                  <p className="text-gray-500">Loading landing pages...</p>
+                </div>
+              )}
+              
+              {landingPagesError && (
+                <div className="bg-red-50 border border-red-100 rounded-lg p-4 mb-6">
+                  <p className="text-red-600 text-sm">{landingPagesError}</p>
+                </div>
+              )}
+              
+              {!isLandingPagesLoading && !landingPagesError && landingPages.length === 0 && (
+                <div className="text-center py-12 bg-gray-50 rounded-lg border border-gray-200">
+                  <p className="text-gray-500 mb-4">You haven't created any landing pages yet</p>
+                  <Button 
+                    className="bg-[#8000FF] hover:bg-purple-700 text-white"
+                    onClick={() => {
+                      setActiveTab("experiences");
+                      setTimeout(() => setIsModalOpen(true), 100);
+                    }}
+                  >
+                    Create Your First Landing Page
+                  </Button>
+                </div>
+              )}
+              
+              {!isLandingPagesLoading && landingPages.length > 0 && (
+                <div className="grid gap-6">
+                  {landingPages.map((page, index) => (
+                    <div key={page.pageId} className="tab-item-animate" style={{animationDelay: `${0.05 * (index + 1)}s`}}>
+                      <Card className="p-6 hover:shadow-md transition-shadow">
+                        <div className="flex gap-4">
+                          <img
+                            src={page.thumbnail || "/placeholder.jpg"}
+                            alt={page.portfolioName}
+                            className="w-28 h-20 rounded-lg object-cover border"
+                          />
+                          <div className="flex-1">
+                            <h3 className="font-semibold text-lg mb-2">{page.portfolioName}</h3>
+                            <div className="flex items-center gap-2 text-sm text-gray-500 mb-4">
+                              <Calendar className="w-4 h-4" />
+                              Created: {new Date(page.lastVisitedDate).toLocaleDateString()}
+                              <span className="ml-2 px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">
+                                {page.status}
+                              </span>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-4">
+                              <div className="flex items-center gap-3">
+                                <div className="p-2 bg-blue-50 rounded-lg">
+                                  <Eye className="w-5 h-5 text-blue-600" />
+                                </div>
+                                <div>
+                                  <div className="font-semibold text-lg">{page.viewers?.toLocaleString() || "0"}</div>
+                                  <div className="text-sm text-gray-500">Viewers</div>
+                                </div>
+                              </div>
+                              <div className="flex items-center gap-3">
+                                <div className="p-2 bg-green-50 rounded-lg">
+                                  <DollarSign className="w-5 h-5 text-green-600" />
+                                </div>
+                                <div>
+                                  <div className="font-semibold text-lg">${page.revenue?.toLocaleString() || "0"}</div>
+                                  <div className="text-sm text-gray-500">Revenue</div>
+                                </div>
+                              </div>
+                              <div className="flex items-center gap-3">
+                                <div className="p-2 bg-purple-50 rounded-lg">
+                                  <Users className="w-5 h-5 text-purple-600" />
+                                </div>
+                                <div>
+                                  <div className="font-semibold text-lg">{page.conversions || 0} sales</div>
+                                  <div className="text-sm text-gray-500">
+                                    {page.viewers && page.conversions 
+                                      ? ((page.conversions / page.viewers) * 100).toFixed(1) 
+                                      : "0"}% conversion
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className="flex gap-3">
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => handleShareLandingPage(page.pageId)}
+                                className="flex items-center gap-2 hover:bg-blue-50 hover:border-blue-200"
+                              >
+                                <Share2 className="w-4 h-4" />
+                                {copied ? "Copied!" : "Share URL"}
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                className="hover:bg-gray-50"
+                                onClick={() => window.open(`/recommendations/${page.pageId}`, "_blank")}
+                              >
+                                <ExternalLink className="w-4 h-4 mr-2" />
+                                View Page
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+                      </Card>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </TabsContent>
+          </Tabs>
+        </TooltipProvider>
 
         {/* Experience Selection Modal */}
         <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
@@ -635,6 +924,38 @@ export default function AffiliateDashboard({ params }: { params: Promise<{ affil
                 Choose the experiences you want to feature on your landing page.
               </DialogDescription>
             </DialogHeader>
+
+            {/* Landing Page Details Form */}
+            <div className="space-y-4 mb-6 border-b border-gray-200 pb-6">
+              <div>
+                <label htmlFor="portfolioName" className="block text-sm font-medium text-gray-700 mb-1">
+                  Portfolio Name
+                </label>
+                <Input
+                  id="portfolioName"
+                  value={portfolioName}
+                  onChange={(e) => setPortfolioName(e.target.value)}
+                  placeholder="My European Adventure"
+                  className="w-full"
+                />
+              </div>
+              
+              <div>
+                <label htmlFor="experienceText" className="block text-sm font-medium text-gray-700 mb-1">
+                  Description
+                </label>
+                <textarea
+                  id="experienceText"
+                  value={experienceText}
+                  onChange={(e) => setExperienceText(e.target.value)}
+                  placeholder="Here are my favorite tours in Europe!"
+                  className="w-full min-h-[100px] px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                />
+                <p className="mt-1 text-xs text-gray-500">
+                  Describe your collection of experiences to help visitors understand what makes them special.
+                </p>
+              </div>
+            </div>
 
             {/* Experience Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-4">
@@ -692,7 +1013,12 @@ export default function AffiliateDashboard({ params }: { params: Promise<{ affil
               </Button>
               <Button
                 onClick={handleCreateLandingPage}
-                disabled={isCreatingLandingPage || selectedModalExperiences.length === 0}
+                disabled={
+                  isCreatingLandingPage || 
+                  selectedModalExperiences.length === 0 || 
+                  !portfolioName.trim() || 
+                  !experienceText.trim()
+                }
                 className="bg-[#8000FF] hover:bg-purple-700 text-white"
               >
                 {isCreatingLandingPage ? (
@@ -718,9 +1044,23 @@ export default function AffiliateDashboard({ params }: { params: Promise<{ affil
               <div className="flex items-center justify-center w-12 h-12 rounded-full bg-green-100">
                 <Check className="w-6 h-6 text-green-600" />
               </div>
-              <p className="text-center text-gray-600">
-                Your landing page has been created successfully. Here's your unique link:
-              </p>
+              <div className="text-center">
+                <div className="bg-purple-50 border border-purple-100 rounded-lg p-4 mb-4">
+                  <h3 className="font-semibold text-lg text-gray-800 mb-2">
+                    {portfolioName}
+                  </h3>
+                  <p className="text-gray-600 text-sm italic">
+                    "{experienceText}"
+                  </p>
+                  <div className="mt-3 pt-3 border-t border-purple-100 flex items-center justify-center text-sm text-purple-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2"><rect width="7" height="7" x="3" y="3" rx="1"></rect><rect width="7" height="7" x="14" y="3" rx="1"></rect><rect width="7" height="7" x="14" y="14" rx="1"></rect><rect width="7" height="7" x="3" y="14" rx="1"></rect></svg>
+                    {selectedModalExperiences.length} {selectedModalExperiences.length === 1 ? 'experience' : 'experiences'} included
+                  </div>
+                </div>
+                <p className="text-gray-600 mb-4">
+                  Your landing page has been created successfully. Here's your unique link:
+                </p>
+              </div>
               <div className="flex items-center w-full max-w-sm space-x-2">
                 <Input 
                   readOnly 
@@ -744,12 +1084,22 @@ export default function AffiliateDashboard({ params }: { params: Promise<{ affil
                 </Button>
               </div>
             </div>
-            <DialogFooter className="sm:justify-center">
+            <DialogFooter className="sm:justify-center flex gap-3">
               <Button
                 variant="outline"
                 onClick={() => setIsSuccessModalOpen(false)}
               >
                 Close
+              </Button>
+              <Button
+                onClick={() => {
+                  window.open(`/recommendations/${landingPageId}`, "_blank");
+                  setIsSuccessModalOpen(false);
+                }}
+                className="bg-[#8000FF] hover:bg-purple-700 text-white"
+              >
+                <ExternalLink className="w-4 h-4 mr-2" />
+                View Page
               </Button>
             </DialogFooter>
           </DialogContent>

@@ -189,7 +189,7 @@ export function ExperienceCard({
                   className="bg-[#8000FF] hover:bg-purple-700 text-white flex-1"
                   onClick={(e) => {
                     e.stopPropagation()
-                    window.open(`https://headout.com/book/1866`, '_blank')
+                    window.open(experience.url || `https://headout.com/book/${experience.id}`, '_blank')
                   }}
                 >
                   Book Now
@@ -262,7 +262,7 @@ export function ExperienceCard({
                   className="bg-[#8000FF] hover:bg-purple-700 text-white"
                   onClick={(e) => {
                     e.stopPropagation()
-                    window.open(`https://headout.com/book/${experience.id}`, '_blank')
+                    window.open(experience.url || `https://headout.com/book/${experience.id}`, '_blank')
                   }}
                 >
                   Book Now
