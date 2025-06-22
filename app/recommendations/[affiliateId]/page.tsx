@@ -306,7 +306,7 @@ export default function AffiliateRecommendations({ params }: { params: Promise<{
                     category: tour.category || "Tour",
                     image: tour.imageUrl || "/placeholder.jpg",
                     description: tour.shortSummary || tour.summary || "No description available",
-                    url: tour.url || `https://www.headout.com/tour/${tour.id}`
+                    url: `https://www.headout.com/roman-catacombs-tour/the-original-rome-capuchin-crypts-and-catacombs-tour-e-${tour.id.toString()}/`
                   }}
                   variant="grid" 
                   showBookButton={true}
