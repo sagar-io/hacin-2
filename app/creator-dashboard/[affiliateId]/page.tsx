@@ -133,7 +133,7 @@ const getMockAffiliateData = (affiliateId: string): AffiliateData => ({
   influencer: {
     name: "Anita Pinter",
     bio: "Travel enthusiast & adventure seeker 🌍 Sharing amazing experiences from around the globe ✈️ Partnered with Headout for the best travel deals!",
-    avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=988&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    avatar: "https://images.unsplash.com/photo-1595085610896-fb31cfd5d4b7?q=80&w=2067&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     followers: "125K",
     experiences: 47,
     countries: 23,
